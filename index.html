@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хід Конем</title>
+    <link rel="icon" type="image/png" href="ico.png">
+    <style>
+        /* Базовые стили, которые адаптируются по выбранному стилю */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .board {
+            display: grid;
+            gap: 2px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .button-group {
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        /* Цветовые схемы */
+        .style-blue-yellow {
+            --bg-color: #0033cc;
+            --text-color: #ffcc00;
+            --cell-color: #0055cc;
+            --knight-color: #ffcc00;
+            --hint-color: #ffdd44;
+            --button-color: #0033cc;
+        }
+        .style-dark-blue {
+            --bg-color: #000033;
+            --text-color: #99ccff;
+            --cell-color: #1a1a5e;
+            --knight-color: #003366;
+            --hint-color: #3399ff;
+            --button-color: #001a4d;
+        }
+        .style-sunflower {
+            --bg-color: #ffdb4d;
+            --text-color: #3b3b3b;
+            --cell-color: #ffcc00;
+            --knight-color: #ffffff;
+            --hint-color: #ffb84d;
+            --button-color: #ffaa00;
+        }
+        .style-dusk {
+            --bg-color: #3b2d50;
+            --text-color: #f4c2c2;
+            --cell-color: #4e3c63;
+            --knight-color: #cc99ff;
+            --hint-color: #d9c3e3;
+            --button-color: #5f4b7a;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .cell {
+            background-color: var(--cell-color);
+        }
+        .knight { background-color: var(--knight-color); color: #fff; font-weight: bold; }
+        .hint { background-color: var(--hint-color); }
+        button {
+            background-color: var(--button-color);
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="style-blue-yellow">
+
+<h1>Хід Конем</h1>
+
+<div class="slider-container" id="difficultySelector">
+    <p>Оберіть складність</p>
+    <input type="range" id="boardSizeSlider" min="3" max="12" value="8" step="1" />
+    <span id="boardSizeLabel">8 x 8</span>
+    <p>Оберіть стиль оформлення:</p>
+    <select id="styleSelector">
+        <option value="style-blue-yellow">Синьо-жовтий</option>
+        <option value="style-dark-blue">Темно-синій</option>
+        <option value="style-sunflower">Соняшник</option>
+        <option value="style-dusk">Сутінки</option>
+    </select>
+    <button onclick="startGame()">OK</button>
+</div>
+
+<div class="game-content" style="display: none;">
+    <div class="board" id="board"></div>
+    <div class="button-group">
+        <button id="hintBtn">Підказка</button>
+        <button id="undoBtn" disabled>Скасувати хід</button>
+        <button id="newGameBtn" onclick="resetToDifficulty()">Нова гра</button>
+    </div>
+</div>
+
+<script src="knight.js"></script>
+<script>
+    const slider = document.getElementById('boardSizeSlider');
+    const label = document.getElementById('boardSizeLabel');
+    const styleSelector = document.getElementById('styleSelector');
+
+    slider.oninput = () => {
+        label.textContent = `${slider.value} x ${slider.value}`;
+    };
+
+    function startGame() {
+        const boardSize = parseInt(slider.value);
+        document.body.className = styleSelector.value; // Установка выбранного стиля
+        document.getElementById('difficultySelector').style.display = 'none';
+        document.querySelector('.game-content').style.display = 'block';
+        initGame(boardSize);
+    }
+
+    function resetToDifficulty() {
+        document.querySelector('.game-content').style.display = 'none';
+        document.getElementById('difficultySelector').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
